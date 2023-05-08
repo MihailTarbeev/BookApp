@@ -1,6 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 from django.utils.datetime_safe import date
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+
+def get_max_year():
+    return Year.objects.all().order_by("-title")[0]
 
 
 class ReadBooks(models.Model):
@@ -9,10 +15,14 @@ class ReadBooks(models.Model):
     author = models.CharField(max_length=50, verbose_name='Автор')
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
     date_of_reading = models.DateField(default=date.today, verbose_name='Дата прочтения')
-    year_of_reading = models.ForeignKey('Year', verbose_name='Год прочтения', on_delete=models.PROTECT)
+    year_of_reading = models.ForeignKey('Year', verbose_name='Год прочтения', on_delete=models.PROTECT,
+                                        default=get_max_year)
     feedback = models.TextField(verbose_name='Отзыв', blank=True)
-    estimation = models.DecimalField(max_digits=2, decimal_places=0, verbose_name='Оценка')
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
+    estimation = models.IntegerField(verbose_name='Оценка (от 0 до 10)', validators=[
+        MaxValueValidator(10),
+        MinValueValidator(0),
+    ])
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User)
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):
@@ -34,7 +44,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
-        
+
 
 class Year(models.Model):
     title = models.CharField(max_length=4, verbose_name='Год')
@@ -52,7 +62,7 @@ class UnreadBooks(models.Model):
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
     author = models.CharField(max_length=50, verbose_name='Автор')
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User)
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):
