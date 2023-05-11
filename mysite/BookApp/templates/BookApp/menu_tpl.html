@@ -1,0 +1,17 @@
+{% load static %}
+<ul class="posts">
+    {% for item in categories %}
+    <li>
+        <article>
+            <header>
+                <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+            </header>
+            {% if item.photo %}
+            <img  class="image" src="{{ item.photo.url }}" alt="{{ item.title }}"/>
+            {% else %}
+            <img src="{% static 'BookApp/images/book.jpg' %}" alt="{{ item.title }}"/>
+            {% endif %}
+        </article>
+    </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}BookApp{% endblock %}</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--[if lte IE 8]>
+    <script src="{% static 'BookApp/assets/js/ie/html5shiv.js' %}"></script><![endif]-->
+    <link rel="stylesheet" href="{% static 'BookApp/assets/css/main.css' %}"/>
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="{% static 'BookApp/assets/css/ie9.css' %}"/><![endif]-->
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="{% static 'BookApp/assets/css/ie8.css' %}"/><![endif]-->
+</head>
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    {% include 'inc/_header.html' %}
+
+
+    {% block content %}
+    {% endblock %}
+
+    {% include 'inc/_sidebar.html' %}
+
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'BookApp/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'BookApp/assets/js/skel.min.js' %}"></script>
+<script src="{% static 'BookApp/assets/js/util.js' %}"></script>
+<!--[if lte IE 8]>
+<script src="{% static 'BookApp/assets/js/ie/respond.min.js' %}"></script><![endif]-->
+<script src="{% static 'BookApp/assets/js/main.js' %}"></script>
+
+</body>
+</html>

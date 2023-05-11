@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
+from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -15,8 +16,6 @@ class ReadBooks(models.Model):
     author = models.CharField(max_length=50, verbose_name='Автор')
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
     date_of_reading = models.DateField(default=date.today, verbose_name='Дата прочтения')
-    year_of_reading = models.ForeignKey('Year', verbose_name='Год прочтения', on_delete=models.PROTECT,
-                                        default=get_max_year)
     feedback = models.TextField(verbose_name='Отзыв', blank=True)
     estimation = models.IntegerField(verbose_name='Оценка (от 0 до 10)', validators=[
         MaxValueValidator(10),
@@ -37,6 +36,7 @@ class ReadBooks(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):
         return self.title
@@ -44,6 +44,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'slug': self.slug})
 
 
 class Year(models.Model):

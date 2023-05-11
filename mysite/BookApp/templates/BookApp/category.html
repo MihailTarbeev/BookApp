@@ -56,7 +56,8 @@
 </section>
 
 <div id="main">
-    <h2>Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+    <h2>Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt_all }}</span></h2>
+    <h3>Из категории "{{ title }}" - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h3>
     {% for book in books %}
 
     <article class="post">
