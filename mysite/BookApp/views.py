@@ -7,6 +7,7 @@ class Index(ListView):
     model = ReadBooks
     template_name = 'BookApp/index.html'
     context_object_name = 'books'
+    paginate_by = 1
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -20,6 +21,7 @@ class BooksByCategory(ListView):
     template_name = 'BookApp/category.html'
     context_object_name = 'books'
     allow_empty = False
+    paginate_by = 4
 
     def get_queryset(self):
         return ReadBooks.objects.filter(category__slug=self.kwargs['slug'])

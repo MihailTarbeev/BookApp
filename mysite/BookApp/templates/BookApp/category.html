@@ -91,11 +91,7 @@
     <h1 style="text-transform: none">Вы ещё не добавили ни одной книги.</h1>
     {% endfor %}
 
-    <!-- Pagination -->
-    <ul class="actions pagination">
-        <li><a href="" class="disabled button big previous">Previous Page</a></li>
-        <li><a href="#" class="button big next">Next Page</a></li>
-    </ul>
+    {% include 'inc/_pagination.html' %}
 
 </div>
 {% endblock %}
