@@ -27,7 +27,7 @@ class ReadBooks(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-date_of_reading']
+        ordering = ['-date_of_reading', '-estimation']
         verbose_name = 'Прочитанная книга'
         verbose_name_plural = 'Прочитанные книги'
 
@@ -52,7 +52,7 @@ class Category(models.Model):
 
 
 class Author(models.Model):
-    title = models.CharField(max_length=50, verbose_name='Название')
+    title = models.CharField(max_length=50, verbose_name='Имя')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
 
     def __str__(self):
@@ -61,6 +61,9 @@ class Author(models.Model):
     class Meta:
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
+
+    def get_absolute_url(self):
+        return reverse('author', kwargs={'slug': self.slug})
 
 
 class UnreadBooks(models.Model):

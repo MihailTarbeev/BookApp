@@ -3,8 +3,6 @@ from django.db.models import Count
 
 from BookApp.models import Category
 
-
-# Регистрируем библиотеку
 register = template.Library()
 
 

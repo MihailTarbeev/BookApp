@@ -7,12 +7,14 @@
 </header>
 
 
-<ul class="posts">
+<ul class="posts" style="margin-bottom: 0;">
     {% for item in categories %}
     <li>
         <article>
             <header>
                 <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                <p style="text-transform: none">Книг в категории: <span style="font-family: Roboto, sans-serif;">
+                        {{ item.cnt }}</span></p>
             </header>
             {% if item.photo %}
             <img class="image" src="{{ item.photo.url }}" alt="{{ item.title }}"/>

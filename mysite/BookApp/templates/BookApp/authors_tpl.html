@@ -1,0 +1,22 @@
+{% load static %}
+{% if authors %}
+<section>
+    <header>
+        <p>Авторы:</p>
+    </header>
+
+    <ul class="posts">
+        {% for author in authors %}
+        <li>
+            <article>
+                <header>
+                    <h3><a href="{{ author.get_absolute_url }}">{{ author.title }}</a></h3>
+                    <p style="text-transform: none">Книг у автора: <span style="font-family: Roboto, sans-serif;">
+                        {{ author.cnt }}</span></p>
+                </header>
+            </article>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}

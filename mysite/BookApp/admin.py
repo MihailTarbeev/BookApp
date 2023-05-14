@@ -4,7 +4,7 @@ from .models import *
 
 class ReadBooksAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
-    list_display = ('id', 'title', 'slug', 'category', 'date_of_reading',
+    list_display = ('id', 'title', 'slug', 'author', 'category', 'date_of_reading',
                     'estimation')
     list_display_links = ('id', 'title')
     search_fields = ('title',)

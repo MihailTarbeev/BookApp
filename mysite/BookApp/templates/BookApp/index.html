@@ -9,35 +9,7 @@
 <div id="main">
     <h2 style="text-transform: none">Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
     {% for book in books %}
-
-    <article class="post">
-        <header>
-            <div class="title">
-                <h2><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
-                <p style="text-transform: none">{{ book.author }}</p>
-                <p style="font-family: Roboto, sans-serif; text-transform: none">Дата прочтения: {{ book.date_of_reading }}</p>
-                <p style="font-family: Roboto, sans-serif; text-transform: none">Категория:
-                    <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">{{ book.category }}</a></p>
-            </div>
-            <div class="meta" style="display:flex; justify-content: center; align-content: center;">
-                {% if book.photo %}
-                <img src="{{ book.photo.url }}" width="200" alt="{{ book.title }}">
-                {% else %}
-                <img src="{% static 'BookApp/images/book.jpg' %}" width="200" alt="{{ book.title }}">
-                {% endif %}
-            </div>
-        </header>
-        <p>{{ book.feedback|truncatewords:30 }}</p>
-        <footer>
-            <ul class="actions" style="margin-bottom: 0;">
-                <li><a href="{{ book.get_absolute_url }}" class="button">Подробнее</a></li>
-            </ul>
-            <ul class="stats" style="margin-bottom: 0;">
-                <li>Ваша оценка</li>
-                <li>{{ book.estimation }} / 10</li>
-            </ul>
-        </footer>
-    </article>
+    {% include 'inc/_post.html' %}
     {% empty %}
     <h1 style="text-transform: none">Вы ещё не добавили ни одной книги.</h1>
     {% endfor %}

@@ -63,11 +63,14 @@
         <header>
             <div class="title">
                 <h2><a href="#">{{ book.title }}</a></h2>
-                <p style="text-transform: none">{{ book.author }}</p>
+                <p style="text-transform: none"><a href="{{ book.author.get_absolute_url }}"
+                                                   style="border-bottom: none;">
+                    {{ book.author }}</a></p>
                 <p style="font-family: Roboto, sans-serif; text-transform: none">
                     Дата прочтения: {{ book.date_of_reading }}</p>
                 <p style="font-family: Roboto, sans-serif; text-transform: none">Категория:
-                    <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">{{ book.category }}</a></p>
+                    <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">
+                        {{ book.category }}</a></p>
             </div>
             <div class="meta" style="display:flex; justify-content: center; align-content: center;">
                 {% if book.photo %}
