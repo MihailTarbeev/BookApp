@@ -6,66 +6,18 @@
 {% endblock %}
 {% block content %}
 
-<!-- Menu -->
-<section id="menu">
-
-    <!-- Search -->
-    <section>
-        <form class="search" method="get" action="#">
-            <input type="text" name="query" placeholder="Поиск по названию книги"/>
-        </form>
-    </section>
-
-    <!-- Links -->
-    <section>
-        <ul class="links">
-            <li>
-                <a href="#">
-                    <h3>2023</h3>
-                    <p>Книги, прочитанные за 2023 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2022</h3>
-                    <p>Книги, прочитанные за 2022 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2021</h3>
-                    <p>Книги, прочитанные за 2021 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2020</h3>
-                    <p>Книги, прочитанные за 2020 год</p>
-                </a>
-            </li>
-        </ul>
-    </section>
-
-    <!-- Actions -->
-    <section>
-        <ul class="actions vertical">
-            <li><a href="#" class="button big fit">Авторизация</a></li>
-        </ul>
-    </section>
-
-</section>
-
 <div id="main">
-    <h2>Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+    <h2 style="text-transform: none">Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
     {% for book in books %}
 
     <article class="post">
         <header>
             <div class="title">
-                <h2><a href="#">{{ book.title }}</a></h2>
+                <h2><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h2>
                 <p style="text-transform: none">{{ book.author }}</p>
                 <p style="font-family: Roboto, sans-serif; text-transform: none">Дата прочтения: {{ book.date_of_reading }}</p>
-                <p style="font-family: Roboto, sans-serif; text-transform: none">Категория: {{ book.category }}</p>
+                <p style="font-family: Roboto, sans-serif; text-transform: none">Категория:
+                    <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">{{ book.category }}</a></p>
             </div>
             <div class="meta" style="display:flex; justify-content: center; align-content: center;">
                 {% if book.photo %}
@@ -75,10 +27,10 @@
                 {% endif %}
             </div>
         </header>
-        <p>{{ book.feedback }}</p>
+        <p>{{ book.feedback|truncatewords:30 }}</p>
         <footer>
             <ul class="actions" style="margin-bottom: 0;">
-                <li><a href="#" class="button big">Подробнее</a></li>
+                <li><a href="{{ book.get_absolute_url }}" class="button">Подробнее</a></li>
             </ul>
             <ul class="stats" style="margin-bottom: 0;">
                 <li>Ваша оценка</li>

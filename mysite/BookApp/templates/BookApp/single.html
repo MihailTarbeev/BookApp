@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ book.title }}
+{% endblock %}
+{% block content %}
+
+<!-- Menu -->
+<section id="menu">
+
+    <!-- Search -->
+    <section>
+        <form class="search" method="get" action="#">
+            <input type="text" name="query" placeholder="Search"/>
+        </form>
+    </section>
+
+    <!-- Links -->
+    <section>
+        <ul class="links">
+            <li>
+                <a href="#">
+                    <h3>Lorem ipsum</h3>
+                    <p>Feugiat tempus veroeros dolor</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <h3>Dolor sit amet</h3>
+                    <p>Sed vitae justo condimentum</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <h3>Feugiat veroeros</h3>
+                    <p>Phasellus sed ultricies mi congue</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <h3>Etiam sed consequat</h3>
+                    <p>Porta lectus amet ultricies</p>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Actions -->
+    <section>
+        <ul class="actions vertical">
+            <li><a href="#" class="button big fit">Log In</a></li>
+        </ul>
+    </section>
+
+</section>
+
+<!-- Main -->
+<div id="main">
+
+
+    <article class="post" style="margin-bottom: 0;">
+        <header>
+            <div class="title">
+                <h2><a href="#">{{ book.title }}</a></h2>
+                <p style="text-transform: none">{{ book.author }}</p>
+                <p style="font-family: Roboto, sans-serif; text-transform: none">
+                    Дата прочтения: {{ book.date_of_reading }}</p>
+                <p style="font-family: Roboto, sans-serif; text-transform: none">Категория:
+                    <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">{{ book.category }}</a></p>
+            </div>
+            <div class="meta" style="display:flex; justify-content: center; align-content: center;">
+                {% if book.photo %}
+                <img src="{{ book.photo.url }}" width="200" alt="{{ book.title }}">
+                {% else %}
+                <img src="{% static 'BookApp/images/book.jpg' %}" width="200" alt="{{ book.title }}">
+                {% endif %}
+            </div>
+        </header>
+        <p>{{ book.feedback }}</p>
+        <footer>
+            <ul class="stats" style="margin-bottom: 0;">
+                <li>Ваша оценка</li>
+                <li>{{ book.estimation }} / 10</li>
+            </ul>
+        </footer>
+    </article>
+    <a href="javascript:history.back()" class="button" style="margin-top: 30px;">Назад</a>
+</div>
+
+
+{% endblock %}
+{% block sidebar %}
+{% endblock %}
+
+{% block footer %}
+
+<section id="footer" style="text-align: center;">
+    <ul class="icons">
+        <li><a href="https://vk.com/mixbeev1000" class="fa-vk"><span class="label">Twitter</span></a></li>
+        <li><a href="https://www.instagram.com/mihajlo_turb/" class="fa-instagram"><span class="label">Instagram</span></a>
+        </li>
+        <li><a href="https://github.com/MihailTarbeev" class="fa-github"><span class="label">RSS</span></a></li>
+    </ul>
+    <p class="copyright">&copy; Пет-проект Михаила</p>
+</section>
+
+{% endblock %}

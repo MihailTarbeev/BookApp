@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Max
 from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -13,7 +12,7 @@ def get_max_year():
 class ReadBooks(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
-    author = models.CharField(max_length=50, verbose_name='Автор')
+    author = models.ForeignKey('Author', verbose_name='Автор', on_delete=models.PROTECT)
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
     date_of_reading = models.DateField(default=date.today, verbose_name='Дата прочтения')
     feedback = models.TextField(verbose_name='Отзыв', blank=True)
@@ -32,6 +31,9 @@ class ReadBooks(models.Model):
         verbose_name = 'Прочитанная книга'
         verbose_name_plural = 'Прочитанные книги'
 
+    def get_absolute_url(self):
+        return reverse('book', kwargs={'slug': self.slug})
+
 
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
@@ -49,21 +51,22 @@ class Category(models.Model):
         return reverse('category', kwargs={'slug': self.slug})
 
 
-class Year(models.Model):
-    title = models.CharField(max_length=4, verbose_name='Год')
+class Author(models.Model):
+    title = models.CharField(max_length=50, verbose_name='Название')
+    slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = 'Год'
-        verbose_name_plural = 'Года'
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
 
 
 class UnreadBooks(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
-    author = models.CharField(max_length=50, verbose_name='Автор')
+    author = models.ForeignKey('Author', verbose_name='Автор', on_delete=models.PROTECT)
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User)
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)

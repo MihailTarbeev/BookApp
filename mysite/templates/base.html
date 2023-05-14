@@ -18,22 +18,30 @@
 <!-- Wrapper -->
 <div id="wrapper">
 
+    {% block header %}
     {% include 'inc/_header.html' %}
+    {% endblock %}
 
+    {% block menu %}
+    {% include 'inc/_menu.html' %}
+    {% endblock %}
 
     {% block content %}
     {% endblock %}
 
+    {% block sidebar %}
     {% include 'inc/_sidebar.html' %}
-
+    {% endblock %}
 </div>
+    {% block footer %}
+    {% endblock %}
 
-<!-- Scripts -->
+
 <script src="{% static 'BookApp/assets/js/jquery.min.js' %}"></script>
 <script src="{% static 'BookApp/assets/js/skel.min.js' %}"></script>
 <script src="{% static 'BookApp/assets/js/util.js' %}"></script>
-<!--[if lte IE 8]>
-<script src="{% static 'BookApp/assets/js/ie/respond.min.js' %}"></script><![endif]-->
+
+<script src="{% static 'BookApp/assets/js/ie/respond.min.js' %}"></script>
 <script src="{% static 'BookApp/assets/js/main.js' %}"></script>
 
 </body>

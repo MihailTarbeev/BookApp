@@ -6,58 +6,11 @@
 {% endblock %}
 {% block content %}
 
-<!-- Menu -->
-<section id="menu">
 
-    <!-- Search -->
-    <section>
-        <form class="search" method="get" action="#">
-            <input type="text" name="query" placeholder="Поиск по названию книги"/>
-        </form>
-    </section>
-
-    <!-- Links -->
-    <section>
-        <ul class="links">
-            <li>
-                <a href="#">
-                    <h3>2023</h3>
-                    <p>Книги, прочитанные за 2023 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2022</h3>
-                    <p>Книги, прочитанные за 2022 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2021</h3>
-                    <p>Книги, прочитанные за 2021 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2020</h3>
-                    <p>Книги, прочитанные за 2020 год</p>
-                </a>
-            </li>
-        </ul>
-    </section>
-
-    <!-- Actions -->
-    <section>
-        <ul class="actions vertical">
-            <li><a href="#" class="button big fit">Авторизация</a></li>
-        </ul>
-    </section>
-
-</section>
 
 <div id="main">
-    <h2>Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt_all }}</span></h2>
-    <h3>Из категории "{{ title }}" - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h3>
+    <h2 style="text-transform: none">Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt_all }}</span></h2>
+    <h3 style="text-transform: none">Из категории "{{ title }}" - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h3>
     {% for book in books %}
 
     <article class="post">
@@ -79,7 +32,7 @@
         <p>{{ book.feedback }}</p>
         <footer>
             <ul class="actions" style="margin-bottom: 0;">
-                <li><a href="#" class="button big">Подробнее</a></li>
+                <li><a href="{{ book.get_absolute_url }}" class="button big">Подробнее</a></li>
             </ul>
             <ul class="stats" style="margin-bottom: 0;">
                 <li>Ваша оценка</li>
