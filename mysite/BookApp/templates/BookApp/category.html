@@ -7,8 +7,8 @@
 {% block content %}
 
 <div id="main">
-    <h2 style="text-transform: none">Всего книг прочитано - <span style="font-family: Roboto, sans-serif;">{{ cnt_all }}</span></h2>
-    <h3 style="text-transform: none">Из категории "{{ title }}" - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h3>
+    <h2 style="text-transform: none">Из категории "{{ category }}" добавлено книг - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+    <img src="{{ category.photo.url }}" style="height: 140px;">
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}

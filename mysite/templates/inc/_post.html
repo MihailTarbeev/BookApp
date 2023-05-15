@@ -20,7 +20,7 @@
             {% endif %}
         </div>
     </header>
-    <p>{{ book.feedback }}</p>
+    <p>{{ book.feedback|safe|truncatewords_html:30 }}</p>
     <footer>
         <ul class="actions" style="margin-bottom: 0;">
             <li><a href="{{ book.get_absolute_url }}" class="button">Подробнее</a></li>

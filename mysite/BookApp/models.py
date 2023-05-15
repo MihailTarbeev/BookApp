@@ -52,11 +52,11 @@ class Category(models.Model):
 
 
 class Author(models.Model):
-    title = models.CharField(max_length=50, verbose_name='Имя')
+    name = models.CharField(max_length=50, verbose_name='Имя')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = 'Автор'

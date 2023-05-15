@@ -12,7 +12,7 @@ class Index(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
-        context['cnt'] = ReadBooks.objects.count()
+        context['cnt_all'] = ReadBooks.objects.count()
         return context
 
 
@@ -28,7 +28,7 @@ class BooksByCategory(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Category.objects.get(slug=self.kwargs['slug'])
+        context['category'] = Category.objects.get(slug=self.kwargs['slug'])
         context['cnt_all'] = ReadBooks.objects.count()
         context['cnt'] = ReadBooks.objects.filter(category__slug=self.kwargs['slug']).count()
         return context
@@ -56,7 +56,7 @@ class BooksByAuthor(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Author.objects.get(slug=self.kwargs['slug'])
+        context['name'] = Author.objects.get(slug=self.kwargs['slug'])
         context['cnt_all'] = ReadBooks.objects.count()
         context['cnt'] = ReadBooks.objects.filter(author__slug=self.kwargs['slug']).count()
         return context
