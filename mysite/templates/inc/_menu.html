@@ -37,11 +37,20 @@
         </ul>
     </section>
 
-    <!-- Actions -->
+    {% if request.user.is_authenticated %}
     <section>
         <ul class="actions vertical">
-            <li><a href="#" class="button big fit">Авторизация</a></li>
+            <li>Добро пожаловать, {{ user.username }}</li>
+            <li><a href="{% url 'logout' %}" class="button fit">Выйти</a></li>
         </ul>
     </section>
+    {% else %}
+    <section>
+        <ul class="actions vertical">
+            <li><a href="{% url 'logout' %}" class="button fit">Вход</a></li>
+            <li><a href="{% url 'login' %}" class="button fit">Авторизация</a></li>
+        </ul>
+    </section>
+    {% endif %}
 
 </section>

@@ -6,7 +6,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class ReadBooksAdminForm(forms.ModelForm):
-    feedback = forms.CharField(widget=CKEditorUploadingWidget())
+    feedback = forms.CharField(widget=CKEditorUploadingWidget(), required=False, label='Отзыв')
 
     class Meta:
         model = ReadBooks
@@ -17,7 +17,7 @@ class ReadBooksAdmin(admin.ModelAdmin):
     form = ReadBooksAdminForm
     prepopulated_fields = {"slug": ("title",)}
     list_display = ('id', 'title', 'slug', 'author', 'category', 'date_of_reading',
-                    'estimation', 'get_photo',)
+                    'estimation', 'get_photo')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'author')

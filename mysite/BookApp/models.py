@@ -3,10 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-
-def get_max_year():
-    return Year.objects.all().order_by("-title")[0]
+from django.utils.text import slugify
 
 
 class ReadBooks(models.Model):
@@ -20,7 +17,7 @@ class ReadBooks(models.Model):
         MaxValueValidator(10),
         MinValueValidator(0),
     ])
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User, editable=False)
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):
@@ -33,6 +30,10 @@ class ReadBooks(models.Model):
 
     def get_absolute_url(self):
         return reverse('book', kwargs={'slug': self.slug})
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.title)
+    #     super(ReadBooks, self).save(*args, **kwargs)
 
 
 class Category(models.Model):

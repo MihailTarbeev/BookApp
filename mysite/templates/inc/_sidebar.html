@@ -11,13 +11,13 @@
             <p>Читайте вместе с нами</p>
         </header>
         <h2 style="text-transform: none">За всё время Вами прочитано книг - <span style="font-family: Roboto, sans-serif;">{{ cnt_all }}</span></h2>
+        <a href="{% url 'add_read_books' %}" class="button">Добавить книгу</a>
     </section>
 
-    <!-- Posts List -->
         {% show_menu %}
 
         {% show_authors %}
-    <!-- About -->
+
     <section class="blurb">
         <h2>О сайте</h2>
         <p>Это книжный сайт. Здесь Вы можете отслеживать свой книжный прогресс,

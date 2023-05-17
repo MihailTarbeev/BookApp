@@ -7,13 +7,14 @@
 {% block content %}
 
 <div id="main">
+    <h1>Ваша книжная полка</h1>
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}
     <h1 style="text-transform: none">Вы ещё не добавили ни одной книги.</h1>
     {% endfor %}
 
-    <!-- Pagination -->
+
     {% include 'inc/_pagination.html' %}
 
 </div>

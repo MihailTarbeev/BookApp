@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ book.title }}
+{% endblock %}
+{% block content %}
+
+<div id="main">
+    <h1>Книги, которые Вы хотели бы прочитать</h1>
+
+    {% for book in books %}
+
+    <div id="main">
+        <article class="post" style="padding-bottom: 0">
+            <header style="margin-bottom: 0">
+                <div class="title">
+                    <h2>{{ book.title }}</h2>
+                    <p style="text-transform: none">Автор:
+                        <span style="font-family: Roboto, sans-serif; text-transform: none">
+                    <a href="{{ book.author.get_absolute_url }}" style="border-bottom: none;">{{ book.author }}</a>
+                </span>
+                    </p>
+                    <p style="text-transform: none">Категория:
+                        <a href="{{ book.category.get_absolute_url }}" style="border-bottom: none;">
+                            <span style="font-family: Roboto, sans-serif; text-transform: none">{{ book.category }}</span></a>
+                    </p>
+                </div>
+                <div class="meta" style="display:flex; justify-content: center; align-content: center;">
+                    {% if book.photo %}
+                    <img src="{{ book.photo.url }}" width="200" alt="{{ book.title }}">
+                    {% else %}
+                    <img src="{% static 'BookApp/images/book.jpg' %}" width="200" alt="{{ book.title }}">
+                    {% endif %}
+                </div>
+            </header>
+        </article>
+    </div>
+
+    {% empty %}
+
+    <h1 style="text-transform: none">Вы ещё не добавили ни одной книги.</h1>
+
+    {% endfor %}
+
+    {% include 'inc/_pagination.html' %}
+
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block footer %}
+
+<section id="footer" style="text-align: center;">
+    <ul class="icons">
+        <li><a href="https://vk.com/mixbeev1000" class="fa-vk"><span class="label">Twitter</span></a></li>
+        <li><a href="https://www.instagram.com/mihajlo_turb/" class="fa-instagram"><span class="label">Instagram</span></a>
+        </li>
+        <li><a href="https://github.com/MihailTarbeev" class="fa-github"><span class="label">RSS</span></a></li>
+    </ul>
+    <p class="copyright">&copy; Пет-проект Михаила</p>
+</section>
+
+{% endblock %}
