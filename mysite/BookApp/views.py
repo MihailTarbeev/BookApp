@@ -6,7 +6,7 @@ from .forms import ReadBookForm
 from pytils.translit import slugify
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from BookApp.forms import UserRegisterForm, UserLoginFrom
+from BookApp.forms import UserRegisterForm, UserLoginFrom, AuthorForm
 
 
 def register(request):
@@ -122,11 +122,35 @@ class AddReadBooks(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.slug = slugify(form.instance.title)
+        form.instance.slug = original_slug = slugify(form.instance.title)
+        i = 1
+        while ReadBooks.objects.filter(slug=form.instance.slug):
+            form.instance.slug = '{}-{}'.format(original_slug, i)
+            i += 1
         return super(AddReadBooks, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление книги'
+        context['cnt_all'] = ReadBooks.objects.count()
+        return context
+
+
+class AddAuthor(CreateView):
+    form_class = AuthorForm
+    template_name = 'BookApp/add_author.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.slug = original_slug = slugify(form.instance.name)
+        i = 1
+        while Author.objects.filter(slug=form.instance.slug):
+            form.instance.slug = '{}-{}'.format(original_slug, i)
+            i += 1
+        return super(AddAuthor, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление автора'
         context['cnt_all'] = ReadBooks.objects.count()
         return context

@@ -3,7 +3,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.utils.text import slugify
 
 
 class ReadBooks(models.Model):
@@ -30,10 +29,6 @@ class ReadBooks(models.Model):
 
     def get_absolute_url(self):
         return reverse('book', kwargs={'slug': self.slug})
-
-    # def save(self, *args, **kwargs):
-    #     self.slug = slugify(self.title)
-    #     super(ReadBooks, self).save(*args, **kwargs)
 
 
 class Category(models.Model):

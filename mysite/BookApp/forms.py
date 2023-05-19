@@ -1,10 +1,13 @@
 from django import forms
-from .models import ReadBooks
+from .models import ReadBooks, Author
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class ReadBookForm(forms.ModelForm):
+    feedback = forms.CharField(widget=CKEditorUploadingWidget(), required=False, label='Отзыв')
+
     class Meta:
         model = ReadBooks
         # fields = ['title', 'slug', 'author', 'category', 'date_of_reading', 'feedback', 'estimation', 'photo', 'user']
@@ -13,8 +16,8 @@ class ReadBookForm(forms.ModelForm):
 
 
 class UserLoginFrom(AuthenticationForm):
-    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput())
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput())
 
 
 class UserRegisterForm(UserCreationForm):
@@ -27,3 +30,9 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['name']
