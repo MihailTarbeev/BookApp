@@ -16,7 +16,7 @@ class ReadBooks(models.Model):
         MaxValueValidator(10),
         MinValueValidator(0),
     ])
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User, editable=False)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):
@@ -50,6 +50,7 @@ class Category(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=50, verbose_name='Имя')
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
 
     def __str__(self):
         return self.name
@@ -67,7 +68,7 @@ class UnreadBooks(models.Model):
     slug = models.SlugField(max_length=50, verbose_name='Url', unique=True)
     author = models.ForeignKey('Author', verbose_name='Автор', on_delete=models.PROTECT)
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.PROTECT)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь', default=User)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Пользователь')
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фотография', blank=True)
 
     def __str__(self):

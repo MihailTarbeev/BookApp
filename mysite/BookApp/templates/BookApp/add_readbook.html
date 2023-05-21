@@ -8,7 +8,7 @@
 
 <div id="main">
     <h1>Добавление новой книги</h1>
-    <form action="{% url 'add_read_books' %}" method="post">
+    <form action="{% url 'add_read_books' %}" method="post" enctype='multipart/form-data'>
 
         {% csrf_token %}
 

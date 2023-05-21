@@ -17,10 +17,11 @@ class ReadBooksAdmin(admin.ModelAdmin):
     form = ReadBooksAdminForm
     prepopulated_fields = {"slug": ("title",)}
     list_display = ('id', 'title', 'slug', 'author', 'category', 'date_of_reading',
-                    'estimation', 'get_photo')
+                    'estimation', 'get_photo', 'user')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'author')
+    save_as = True
 
     def get_photo(self, obj):
         if obj.photo:
@@ -36,6 +37,7 @@ class UnreadBooksAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'author')
+    save_as = True
 
     def get_photo(self, obj):
         if obj.photo:
@@ -53,7 +55,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class AuthorAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('id', 'name', 'slug')
+    list_display = ('id', 'name', 'slug', 'user')
     list_display_links = ('id', 'name')
 
 

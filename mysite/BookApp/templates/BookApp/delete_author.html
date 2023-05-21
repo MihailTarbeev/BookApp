@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Удаление автора {{ author }}
+{% endblock %}
+{% block content %}
+
+<div id="main">
+    <h1>Удаление автора {{ author }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>Вы действительно хотите удалить автора "{{ author }}"?</p>
+        <div>
+            <button type="submit">Да</button>
+            <a class="button" style="margin-left: 40px; border-bottom: none;" href="javascript:history.back()">Нет</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

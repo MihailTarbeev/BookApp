@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block content %}
+
+
+<div id="main">
+
+    <h1>Выберите автора, которого хотите удалить</h1>
+    {% for author in authors %}
+    <p style="margin: 15px 0px 15px 0px;"><a href="{% url 'delete_author' author.id %}" style="border-bottom:none;">
+        {{ author }}</a></p>
+    {% empty %}
+    <p style="text-transform: none">Нет возможных авторов, для удаления. Сначала удалите книги этих авторов!</p>
+    {% endfor %}
+
+    {% include 'inc/_pagination.html' %}
+</div>
+{% endblock %}

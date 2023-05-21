@@ -1,5 +1,7 @@
 from django import forms
-from .models import ReadBooks, Author
+import re
+from django.core.exceptions import ValidationError
+from .models import ReadBooks, Author, UnreadBooks
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -13,6 +15,12 @@ class ReadBookForm(forms.ModelForm):
         # fields = ['title', 'slug', 'author', 'category', 'date_of_reading', 'feedback', 'estimation', 'photo', 'user']
         # fields = '__all__'
         exclude = ['user', 'slug']
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if re.search(r'\d', title):
+            raise ValidationError('Название не должно содержать цифры')
+        return title
 
 
 class UserLoginFrom(AuthenticationForm):
@@ -36,3 +44,40 @@ class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['name']
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if re.search(r'\d', name):
+            raise ValidationError('Имя автора не должно содержать цифр')
+        return name
+
+
+class UnreadBookForm(forms.ModelForm):
+
+    class Meta:
+        model = UnreadBooks
+        exclude = ['user', 'slug']
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if re.search(r'\d', title):
+            raise ValidationError('Название не должно содержать цифры')
+        return title
+
+
+class DeleteReadBookForm(forms.ModelForm):
+    class Meta:
+        model = ReadBooks
+        fields = []
+
+
+class DeleteUnreadBookForm(forms.ModelForm):
+    class Meta:
+        model = UnreadBooks
+        fields = []
+
+
+class DeleteAuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = []

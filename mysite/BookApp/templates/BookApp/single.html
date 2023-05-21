@@ -34,6 +34,10 @@
                 <li>Ваша оценка</li>
                 <li>{{ book.estimation }} / 10</li>
             </ul>
+            <ul class="actions" style="margin-bottom: 0;">
+                <li style="float:right;"><a href="{% url 'delete_read_book' book.id %}" class="button small">Удалить</a>
+                </li>
+            </ul>
         </footer>
     </article>
     <a href="javascript:history.back()" class="button" style="margin-top: 30px;">Назад</a>

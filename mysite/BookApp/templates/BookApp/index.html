@@ -6,12 +6,30 @@
 {% endblock %}
 {% block content %}
 
+
 <div id="main">
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+
+        <li
+        {% if message.tags %}
+        class="{{ message.tags }}"
+        {% endif %}>
+        {{ message }}
+        </li>
+
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <h1>Ваша книжная полка</h1>
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}
-    <h1 style="text-transform: none">Вы ещё не добавили ни одной книги.</h1>
+    <h1 style="text-transform: none">Вы ещё не добавили ни одной книги</h1>
+    <a href="{% url 'add_read_books' %}" class="button small">Добавить книгу</a>
     {% endfor %}
 
 

@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block title %}
-{{ title }}
+Книги из категории:{{ category }}
 {% endblock %}
 {% block content %}
 
 <div id="main">
-    <h2 style="text-transform: none">Из категории "{{ category }}" добавлено книг - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
-    <img src="{{ category.photo.url }}" style="height: 140px;">
+    <h2 style="text-transform: none">Из категории "{{ category }}" прочитано книг - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+    <img src="{{ category.photo.url }}" style="height: 140px; margin: 20px 0px 40px 0px;">
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}
