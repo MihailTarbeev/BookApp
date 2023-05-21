@@ -8,10 +8,22 @@
 
 <div id="main">
     <h1>Книги, которые Вы хотели бы прочитать</h1>
-
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li
+        {% if message.tags %}
+        class="{{ message.tags }}"
+        {% endif %}>
+        {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% for book in books %}
 
     <div id="main">
+
         <article class="post" style="padding-bottom: 0">
             <header style="margin-bottom: 0; position: relative;">
                 <div class="title">

@@ -19,7 +19,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Вы успешно зарегистрировались')
-            return redirect('/')
+            return redirect('index')
         else:
             messages.error(request, 'Ошибка регистрации')
     else:
@@ -64,7 +64,7 @@ class BooksByCategory(ListView):
     model = ReadBooks
     template_name = 'BookApp/category.html'
     context_object_name = 'books'
-    allow_empty = False
+    allow_empty = True
     paginate_by = 5
 
     def get_queryset(self):
@@ -141,7 +141,8 @@ class AddReadBooks(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление книги'
-        context['cnt_all'] = ReadBooks.objects.count()
+        context['form'].fields['author'].queryset = Author.objects.filter(user=self.request.user)
+        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
         return context
 
 
@@ -153,6 +154,7 @@ class AddAuthor(CreateView):
         form.instance.user = self.request.user
         form.instance.slug = original_slug = slugify(form.instance.name)
         i = 1
+        messages.success(self.request, 'Автор успешно добавлен!')
         while Author.objects.filter(slug=form.instance.slug):
             form.instance.slug = '{}-{}'.format(original_slug, i)
             i += 1
@@ -161,7 +163,7 @@ class AddAuthor(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление автора'
-        context['cnt_all'] = ReadBooks.objects.count()
+        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
         return context
 
 
@@ -176,7 +178,7 @@ class AddUnreadBooks(CreateView):
         while UnreadBooks.objects.filter(slug=form.instance.slug):
             form.instance.slug = '{}-{}'.format(original_slug, i)
             i += 1
-
+        messages.success(self.request, 'Книга успешно добавлена!')
         return super(AddUnreadBooks, self).form_valid(form)
 
     def get_success_url(self):
@@ -185,7 +187,8 @@ class AddUnreadBooks(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление книги'
-        context['cnt_all'] = UnreadBooks.objects.count()
+        context['form'].fields['author'].queryset = Author.objects.filter(user=self.request.user)
+        context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
         return context
 
 
@@ -209,7 +212,7 @@ def delete_unread_book(request, id):
         if form.is_valid():
             book_to_delete.delete()
             messages.success(request, 'Книга была успешна удалена!')
-            return redirect('/')
+            return redirect('unreadbooks')
     else:
         form = DeleteUnreadBookForm(instance=book_to_delete)
     return render(request, 'BookApp/delete_unread_book.html', {'form': form, 'book': book_to_delete})
@@ -228,7 +231,7 @@ class ListAuthors(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Список авторов'
-        context['cnt_all'] = ReadBooks.objects.count()
+        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
         return context
 
 
@@ -239,7 +242,7 @@ def delete_author(request, id):
         if form.is_valid():
             author_to_delete.delete()
             messages.success(request, 'Автор был успешно удален!')
-            return redirect('/')
+            return redirect('index')
     else:
         form = DeleteAuthorForm(instance=author_to_delete)
     return render(request, 'BookApp/delete_author.html', {'form': form, 'author': author_to_delete})

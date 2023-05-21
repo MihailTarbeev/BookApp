@@ -7,9 +7,24 @@
 {% block content %}
 
 
-
 <div id="main">
-    <h2 style="text-transform: none">У автора {{ name }} прочитано книг - <span style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li
+                {% if message.tags %}
+                class="{{ message.tags }}"
+                {% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2 style="text-transform: none">У автора {{ name }} прочитано книг - <span
+            style="font-family: Roboto, sans-serif;">{{ cnt }}</span></h2>
+
+
     {% for book in books %}
 
     {% include 'inc/_post.html' %}

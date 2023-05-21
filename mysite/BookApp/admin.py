@@ -21,7 +21,12 @@ class ReadBooksAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'author')
-    save_as = True
+    fields = ('title', 'slug', 'author', 'category', 'date_of_reading', 'feedback', 'estimation', 'photo')
+
+    # Функция позволит нам автоматически заполнять поле user админом
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
 
     def get_photo(self, obj):
         if obj.photo:
@@ -29,15 +34,26 @@ class ReadBooksAdmin(admin.ModelAdmin):
         return "-"
 
     get_photo.short_description = 'Обложка'
+
+    # Функция не позволяет нам создать объекты с автором, которого создал иной пользователь
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ReadBooksAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['author'].queryset = Author.objects.filter(user=request.user)
+        return form
 
 
 class UnreadBooksAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
-    list_display = ('id', 'title', 'author', 'category', 'get_photo',)
+    list_display = ('id', 'title', 'slug', 'author', 'category', 'get_photo', 'user')
     list_display_links = ('id', 'title')
     search_fields = ('title',)
     list_filter = ('category', 'author')
-    save_as = True
+    fields = ('title', 'slug', 'author', 'category')
+
+    # Функция позволит нам автоматически заполнять поле user админом
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
 
     def get_photo(self, obj):
         if obj.photo:
@@ -45,6 +61,12 @@ class UnreadBooksAdmin(admin.ModelAdmin):
         return "-"
 
     get_photo.short_description = 'Обложка'
+
+    # Функция позволит нам автоматически заполнять поле user админом
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(UnreadBooksAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['author'].queryset = Author.objects.filter(user=request.user)
+        return form
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -57,6 +79,11 @@ class AuthorAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_display = ('id', 'name', 'slug', 'user')
     list_display_links = ('id', 'name')
+
+    # Функция позволит нам автоматически заполнять поле user админом
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
 
 
 admin.site.register(ReadBooks, ReadBooksAdmin)
