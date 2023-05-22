@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Поиск по "{{ title }}"
+{% endblock %}
+{% block content %}
+
+
+<div id="main">
+
+    {% if books %}
+    <h1>Книги по Вашему запросу:</h1>
+    {% endif %}
+    {% for book in books %}
+    {% include 'inc/_post.html' %}
+    {% empty %}
+    <h1 style="text-transform: none">К сожалению, по Вашему запросу "{{ title }}" ничего не найдено.</h1>
+    {% endfor %}
+    {% include 'inc/_pagination.html' %}
+
+</div>
+{% endblock %}

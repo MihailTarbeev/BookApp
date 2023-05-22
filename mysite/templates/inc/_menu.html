@@ -1,13 +1,12 @@
+{% load static %}
 <section id="menu">
-
-    <!-- Search -->
+{% if request.user.is_authenticated %}
     <section>
-        <form class="search" method="get" action="#">
-            <input type="text" name="query" placeholder="Поиск по названию книги"/>
+        <form class="search" method="get" action="{% url 'search_readbooks' %}">
+            <input type="text" name="s" placeholder="Поиск по прочитанным книгам" style="margin-bottom: 25px;"/>
         </form>
     </section>
 
-    <!-- Links -->
     <section>
         <ul class="links">
             <li>
@@ -36,7 +35,13 @@
             </li>
         </ul>
     </section>
-
+    {% else %}
+    <section style="text-align: center;">
+        <h1>Добро пожаловать на сайт!</h1>
+        <img src="{% static 'BookApp/images/bookworm.jpg' %}" style="height: 140px; border-radius: 80px;">
+        <h1>Книжный червь</h1>
+    </section>
+{% endif %}
     {% if request.user.is_authenticated %}
     <section>
         <ul class="actions vertical">

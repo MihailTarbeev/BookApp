@@ -2,19 +2,19 @@
 <ul class="actions pagination">
 
     {% if page_obj.has_previous %}
-    <li><a href="?page={{ page_obj.previous_page_number }}" class="button previous">Предыдущая страница</a></li>
+    <li><a href="?{{ s }}page={{ page_obj.previous_page_number }}" class="button previous">Предыдущая страница</a></li>
     {% endif %}
 
     {% for p in page_obj.paginator.page_range %}
     {% if page_obj.number == p %}
-    <li style="color: red;"><a href="?page={{ p }}" class="button" id="this_page">{{ p }}</a></li>
+    <li style="color: red;"><a href="?{{ s }}page={{ p }}" class="button" id="this_page">{{ p }}</a></li>
     {% elif p > page_obj.number|add:'-2' and p < page_obj.number|add:'2' %}
-    <li><a href="?page={{ p }}" class="button">{{ p }}</a></li>
+    <li><a href="?{{ s }}page={{ p }}" class="button">{{ p }}</a></li>
     {% endif %}
     {% endfor %}
 
     {% if page_obj.has_next %}
-    <li><a href="?page={{ page_obj.next_page_number }}" class="button next">Следующая страница</a></li>
+    <li><a href="?{{ s }}page={{ page_obj.next_page_number }}" class="button next">Следующая страница</a></li>
     {% endif %}
 
 </ul>

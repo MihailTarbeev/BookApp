@@ -24,8 +24,10 @@ class ReadBookForm(forms.ModelForm):
 
 
 class UserLoginFrom(AuthenticationForm):
-    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput())
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput())
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(
+        attrs={'class': 'login_field', 'style': 'width: 30%; margin: auto auto;'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(
+        attrs={'class': 'login_field', 'style': 'width: 30%; margin: auto auto;'}))
 
 
 class UserRegisterForm(UserCreationForm):
@@ -53,7 +55,6 @@ class AuthorForm(forms.ModelForm):
 
 
 class UnreadBookForm(forms.ModelForm):
-
     class Meta:
         model = UnreadBooks
         exclude = ['user', 'slug']
