@@ -1,6 +1,7 @@
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
+from django.utils.datetime_safe import datetime
 from django.views.generic import DetailView, CreateView
 from django.views.generic.list import ListView
 from .models import ReadBooks, Category, Author, UnreadBooks
@@ -280,4 +281,23 @@ class SearchUnreadbooks(ListView):
         context['s'] = f"s={self.request.GET.get('s')}&"
         context['title'] = self.request.GET.get('s')
         context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
+        return context
+
+
+class ReadBooksByYear(ListView):
+    model = ReadBooks
+    template_name = 'BookApp/readbooks_per_year.html'
+    context_object_name = 'books'
+    allow_empty = True
+    paginate_by = 5
+
+    def get_queryset(self):
+        year = self.kwargs['year']
+        return ReadBooks.objects.filter(date_of_reading__year=year, user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = self.kwargs['year']
+        context['year'] = year
+        context['cnt'] = ReadBooks.objects.filter(date_of_reading__year=year, user=self.request.user).count()
         return context

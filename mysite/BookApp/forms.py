@@ -1,4 +1,5 @@
 from django import forms
+from datetime import date
 import re
 from django.core.exceptions import ValidationError
 from .models import ReadBooks, Author, UnreadBooks
@@ -21,6 +22,15 @@ class ReadBookForm(forms.ModelForm):
         if re.search(r'\d', title):
             raise ValidationError('Название не должно содержать цифры')
         return title
+
+    # Запретим добавлять книги, у которых дата позже сегодняшней
+    def clean_date_of_reading(self):
+        date_of_reading = self.cleaned_data['date_of_reading']
+        now = date.today()
+        delta = now - date_of_reading
+        if delta.total_seconds() < 0:
+            raise ValidationError('Дата прочтения не может быть в будущем')
+        return date_of_reading
 
 
 class UserLoginFrom(AuthenticationForm):
@@ -64,7 +74,7 @@ class UnreadBookForm(forms.ModelForm):
         if re.search(r'\d', title):
             raise ValidationError('Название не должно содержать цифры')
         return title
-
+    
 
 class DeleteReadBookForm(forms.ModelForm):
     class Meta:

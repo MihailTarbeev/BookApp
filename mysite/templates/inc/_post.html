@@ -21,7 +21,7 @@
             {% if book.photo %}
             <img src="{{ book.photo.url }}" width="200" alt="{{ book.title }}">
             {% else %}
-            <img src="{% static 'BookApp/images/book.jpg' %}" width="200" alt="{{ book.title }}">
+            <img src="{% static 'BookApp/images/book.jpg' %}" style="max-width: 200px;" alt="{{ book.title }}">
             {% endif %}
         </div>
     </header>

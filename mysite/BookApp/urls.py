@@ -1,8 +1,7 @@
-from django.contrib import admin
 from django.urls import path
 from .views import Index, BooksByCategory, SingleBook, BooksByAuthor, FutureBooks, AddReadBooks, register, user_login, \
     user_logout, AddAuthor, AddUnreadBooks, delete_read_book, delete_unread_book, ListAuthors, delete_author, \
-    SearchReadbooks, SearchUnreadbooks
+    SearchReadbooks, SearchUnreadbooks, ReadBooksByYear
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
@@ -23,5 +22,5 @@ urlpatterns = [
     path('search_readbooks/', SearchReadbooks.as_view(), name='search_readbooks'),
     path('search_readbooks/', SearchReadbooks.as_view(), name='search_readbooks'),
     path('search_unreadbooks/', SearchUnreadbooks.as_view(), name='search_unreadbooks'),
+    path('readbooks_per_year/<year>', ReadBooksByYear.as_view(), name='readbooks_per_year'),
 ]
-

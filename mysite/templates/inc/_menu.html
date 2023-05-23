@@ -1,4 +1,5 @@
 {% load static %}
+{% load years %}
 <section id="menu">
 {% if request.user.is_authenticated %}
     <section>
@@ -7,34 +8,8 @@
         </form>
     </section>
 
-    <section>
-        <ul class="links">
-            <li>
-                <a href="#">
-                    <h3>2023</h3>
-                    <p>Книги, прочитанные за 2023 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2022</h3>
-                    <p>Книги, прочитанные за 2022 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2021</h3>
-                    <p>Книги, прочитанные за 2021 год</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <h3>2020</h3>
-                    <p>Книги, прочитанные за 2020 год</p>
-                </a>
-            </li>
-        </ul>
-    </section>
+    {% show_years %}
+
     {% else %}
     <section style="text-align: center;">
         <h1>Добро пожаловать на сайт!</h1>

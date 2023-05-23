@@ -1,0 +1,13 @@
+<section>
+    <ul class="links">
+        {% for year in years %}
+        <li>
+            <a href="{% url 'readbooks_per_year' year=year %}">
+                <h3 style="font-family: Roboto, sans-serif; text-transform: none">{{ year }}</h3>
+                <p>Книги, прочитанные за <span style="font-family: Roboto, sans-serif; text-transform: none">
+                    {{ year }}</span> год</p>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
