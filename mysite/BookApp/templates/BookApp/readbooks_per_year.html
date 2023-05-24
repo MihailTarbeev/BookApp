@@ -9,7 +9,7 @@
 <div id="main">
 
     <h1>Книги прочитанные за <span style="font-family: Roboto, sans-serif; text-transform: none">{{ year }}</span> год</h1>
-    <h1 style="text-transform: none;">За этот год Вами прочитано книг - {{ cnt }}</h1>
+    <h1 style="text-transform: none;">Вами прочитано книг - {{ cnt }}</h1>
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}

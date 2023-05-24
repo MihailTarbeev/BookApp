@@ -1,13 +1,16 @@
 {% load static %}
 {% load years %}
 <section id="menu">
-{% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <section>
+        <ul class="actions vertical">
+            <li>Добро пожаловать, {{ user.username }} | <a href="{% url 'logout' %}" style="border-bottom: none">
+                Выйти</a></li>
+        </ul>
         <form class="search" method="get" action="{% url 'search_readbooks' %}">
             <input type="text" name="s" placeholder="Поиск по прочитанным книгам" style="margin-bottom: 25px;"/>
         </form>
-    </section>
-
+</section>
     {% show_years %}
 
     {% else %}
@@ -16,15 +19,6 @@
         <img src="{% static 'BookApp/images/bookworm.jpg' %}" style="height: 140px; border-radius: 80px;">
         <h1>Книжный червь</h1>
     </section>
-{% endif %}
-    {% if request.user.is_authenticated %}
-    <section>
-        <ul class="actions vertical">
-            <li>Добро пожаловать, {{ user.username }}</li>
-            <li><a href="{% url 'logout' %}" class="button fit">Выйти</a></li>
-        </ul>
-    </section>
-    {% else %}
     <section>
         <ul class="actions vertical">
             <li><a href="{% url 'login' %}" class="button fit">Авторизация</a></li>

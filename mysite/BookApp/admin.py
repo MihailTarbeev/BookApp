@@ -79,6 +79,7 @@ class AuthorAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_display = ('id', 'name', 'slug', 'user')
     list_display_links = ('id', 'name')
+    fields = ('name', 'slug')
 
     # Функция позволит нам автоматически заполнять поле user админом
     def save_model(self, request, obj, form, change):

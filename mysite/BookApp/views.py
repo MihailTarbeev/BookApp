@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
@@ -11,6 +12,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from BookApp.forms import UserRegisterForm, UserLoginFrom, AuthorForm, UnreadBookForm, DeleteReadBookForm, \
     DeleteUnreadBookForm, DeleteAuthorForm
+from django.contrib.auth.decorators import login_required
 
 
 def register(request):
@@ -45,11 +47,12 @@ def user_logout(request):
     return redirect('login')
 
 
-class Index(ListView):
+class Index(LoginRequiredMixin, ListView):
     model = ReadBooks
     template_name = 'BookApp/index.html'
     context_object_name = 'books'
     paginate_by = 5
+    login_url = '/login/'
 
     def get_queryset(self):
         return ReadBooks.objects.filter(user=self.request.user)
@@ -61,12 +64,13 @@ class Index(ListView):
         return context
 
 
-class BooksByCategory(ListView):
+class BooksByCategory(LoginRequiredMixin, ListView):
     model = ReadBooks
     template_name = 'BookApp/category.html'
     context_object_name = 'books'
     allow_empty = True
     paginate_by = 5
+    login_url = '/login/'
 
     def get_queryset(self):
         return ReadBooks.objects.filter(category__slug=self.kwargs['slug'], user=self.request.user)
@@ -79,10 +83,11 @@ class BooksByCategory(ListView):
         return context
 
 
-class SingleBook(DetailView):
+class SingleBook(LoginRequiredMixin, DetailView):
     model = ReadBooks
     template_name = 'BookApp/single.html'
     context_object_name = 'book'
+    login_url = '/login/'
 
     def get_queryset(self):
         return ReadBooks.objects.filter(slug=self.kwargs['slug'], user=self.request.user)
@@ -92,12 +97,13 @@ class SingleBook(DetailView):
         return context
 
 
-class BooksByAuthor(ListView):
+class BooksByAuthor(LoginRequiredMixin, ListView):
     model = ReadBooks
     template_name = 'BookApp/author.html'
     context_object_name = 'books'
     allow_empty = True
     paginate_by = 5
+    login_url = '/login/'
 
     def get_queryset(self):
         return ReadBooks.objects.filter(author__slug=self.kwargs['slug'], user=self.request.user)
@@ -110,11 +116,12 @@ class BooksByAuthor(ListView):
         return context
 
 
-class FutureBooks(ListView):
+class FutureBooks(LoginRequiredMixin, ListView):
     model = UnreadBooks
     template_name = 'BookApp/unreadbooks.html'
     context_object_name = 'books'
     paginate_by = 5
+    login_url = '/login/'
 
     def get_queryset(self):
         return UnreadBooks.objects.filter(user=self.request.user)
@@ -126,9 +133,10 @@ class FutureBooks(ListView):
         return context
 
 
-class AddReadBooks(CreateView):
+class AddReadBooks(LoginRequiredMixin, CreateView):
     form_class = ReadBookForm
     template_name = 'BookApp/add_readbook.html'
+    login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -147,9 +155,10 @@ class AddReadBooks(CreateView):
         return context
 
 
-class AddAuthor(CreateView):
+class AddAuthor(LoginRequiredMixin, CreateView):
     form_class = AuthorForm
     template_name = 'BookApp/add_author.html'
+    login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -168,9 +177,10 @@ class AddAuthor(CreateView):
         return context
 
 
-class AddUnreadBooks(CreateView):
+class AddUnreadBooks(LoginRequiredMixin, CreateView):
     form_class = UnreadBookForm
     template_name = 'BookApp/add_unreadbook.html'
+    login_url = '/login/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -219,11 +229,12 @@ def delete_unread_book(request, id):
     return render(request, 'BookApp/delete_unread_book.html', {'form': form, 'book': book_to_delete})
 
 
-class ListAuthors(ListView):
+class ListAuthors(LoginRequiredMixin, ListView):
     model = Author
     template_name = 'BookApp/list_authors.html'
     context_object_name = 'authors'
     paginate_by = 10
+    login_url = '/login/'
 
     def get_queryset(self):
         return Author.objects.annotate(cnt_r=Count('readbooks')).annotate(cnt_unr=Count('unreadbooks')).\
@@ -284,12 +295,13 @@ class SearchUnreadbooks(ListView):
         return context
 
 
-class ReadBooksByYear(ListView):
+class ReadBooksByYear(LoginRequiredMixin, ListView):
     model = ReadBooks
     template_name = 'BookApp/readbooks_per_year.html'
     context_object_name = 'books'
     allow_empty = True
     paginate_by = 5
+    login_url = '/login/'
 
     def get_queryset(self):
         year = self.kwargs['year']
