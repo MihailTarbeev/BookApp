@@ -14,10 +14,10 @@
         {% for message in messages %}
 
         <li
-        {% if message.tags %}
-        class="{{ message.tags }}"
-        {% endif %}>
-        {{ message }}
+                {% if message.tags %}
+                class="{{ message.tags }}"
+                {% endif %}>
+            {{ message }}
         </li>
 
         {% endfor %}
@@ -25,6 +25,11 @@
     {% endif %}
 
     <h1>Ваша книжная полка</h1>
+    <section>
+        <form class="search" method="get" action="{% url 'search_readbooks' %}">
+            <input type="text" name="s" placeholder="Поиск книг по названию и автору" style="margin-bottom: 25px;"/>
+        </form>
+    </section>
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}

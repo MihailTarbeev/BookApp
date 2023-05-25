@@ -57,6 +57,7 @@ class Author(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
 

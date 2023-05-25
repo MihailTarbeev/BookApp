@@ -11,11 +11,21 @@
 
     {% if books %}
     <h1>Книги по Вашему запросу <span style="text-transform: none">"{{ title }}"</span>:</h1>
+    <section>
+        <form class="search" method="get" action="{% url 'search_readbooks' %}">
+            <input type="text" name="s" placeholder="Поиск книг по названию и автору" style="margin-bottom: 25px;"/>
+        </form>
+    </section>
     {% endif %}
     {% for book in books %}
     {% include 'inc/_post.html' %}
     {% empty %}
     <h1 style="text-transform: none">К сожалению, по Вашему запросу "{{ title }}" ничего не найдено.</h1>
+    <section>
+        <form class="search" method="get" action="{% url 'search_readbooks' %}">
+            <input type="text" name="s" placeholder="Поиск по прочитанным книгам" style="margin-bottom: 25px;"/>
+        </form>
+    </section>
     {% endfor %}
     {% include 'inc/_pagination.html' %}
 

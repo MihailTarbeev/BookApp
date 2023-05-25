@@ -141,10 +141,10 @@ class FutureBooks(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Книги на будущее'
-        context['cnt_all'] = cache.get('cnt_all')
+        context['cnt_all'] = cache.get('cnt_all_unread')
         if not context['cnt_all']:
-            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
-            cache.set('cnt_all', context['cnt_all'], 15)
+            context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all_unread', context['cnt_all'], 15)
         return context
 
 

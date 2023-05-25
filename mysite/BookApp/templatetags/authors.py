@@ -12,6 +12,6 @@ def show_authors(context):
     if not authors:
         request = context['request']
         authors = Author.objects.annotate(cnt=Count('readbooks', filter=Q(readbooks__user=request.user)))\
-            .filter(cnt__gt=0).order_by('-cnt', 'name',)
+            .filter(cnt__gt=0).order_by('-cnt', 'name',)[:3]
         cache.set('authors', authors, 15)
     return {'authors': authors}

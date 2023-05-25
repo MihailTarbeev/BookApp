@@ -2,15 +2,10 @@
 {% load years %}
 <section id="menu">
     {% if request.user.is_authenticated %}
-    <section>
-        <ul class="actions vertical">
-            <li>Добро пожаловать, {{ user.username }} | <a href="{% url 'logout' %}" style="border-bottom: none">
-                Выйти</a></li>
-        </ul>
-        <form class="search" method="get" action="{% url 'search_readbooks' %}">
-            <input type="text" name="s" placeholder="Поиск по прочитанным книгам" style="margin-bottom: 25px;"/>
-        </form>
-</section>
+    <ul class="actions vertical">
+        <li>Добро пожаловать, {{ user.username }}</li>
+        <li><a href="{% url 'logout' %}" style="border-bottom: none" class="button fit">Выйти</a></li>
+    </ul>
     {% show_years %}
 
     {% else %}

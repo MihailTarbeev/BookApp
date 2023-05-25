@@ -13,8 +13,6 @@ class ReadBookForm(forms.ModelForm):
 
     class Meta:
         model = ReadBooks
-        # fields = ['title', 'slug', 'author', 'category', 'date_of_reading', 'feedback', 'estimation', 'photo', 'user']
-        # fields = '__all__'
         exclude = ['user', 'slug']
 
     def clean_title(self):
@@ -45,7 +43,8 @@ class UserRegisterForm(UserCreationForm):
                                widget=forms.TextInput())
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput())
     password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput())
-    email = forms.EmailField(label='E-mail', widget=forms.EmailInput(), required=False)
+    email = forms.EmailField(label='E-mail', widget=forms.EmailInput(), required=False,
+                             help_text='Не обязательное поле')
 
     class Meta:
         model = User
@@ -74,7 +73,7 @@ class UnreadBookForm(forms.ModelForm):
         if re.search(r'\d', title):
             raise ValidationError('Название не должно содержать цифры')
         return title
-    
+
 
 class DeleteReadBookForm(forms.ModelForm):
     class Meta:
