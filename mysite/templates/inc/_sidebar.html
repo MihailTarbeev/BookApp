@@ -3,7 +3,6 @@
 {% load authors %}
 <section id="sidebar">
 
-    <!-- Intro -->
     <section id="intro">
         <img src="{% static 'BookApp/images/bookworm.jpg' %}" style="height: 140px; border-radius: 80px;">
         <header>
@@ -19,20 +18,18 @@
         </div>
     </section>
 
+
     {% show_menu %}
 
     {% show_authors %}
+
 
     <section class="blurb">
         <h2>О сайте</h2>
         <p style="text-indent: 10px;">Это книжный сайт. Здесь Вы можете отслеживать свой книжный прогресс,
             а также добавить интересующие Вас книги для будущего чтения.</p>
-        <ul class="actions">
-            <li><a href="https://github.com/MihailTarbeev?tab=repositories" class="button">Смотри больше</a></li>
-        </ul>
     </section>
 
-    <!-- Footer -->
     <section id="footer">
         <ul class="icons">
             <li><a href="https://vk.com/mixbeev1000" class="fa-vk"><span class="label">Twitter</span></a></li>

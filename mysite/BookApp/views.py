@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
-from django.utils.datetime_safe import datetime
 from django.views.generic import DetailView, CreateView
 from django.views.generic.list import ListView
 from .models import ReadBooks, Category, Author, UnreadBooks
@@ -12,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from BookApp.forms import UserRegisterForm, UserLoginFrom, AuthorForm, UnreadBookForm, DeleteReadBookForm, \
     DeleteUnreadBookForm, DeleteAuthorForm
-from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 
 def register(request):
@@ -55,12 +54,15 @@ class Index(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return ReadBooks.objects.filter(user=self.request.user)
+        return ReadBooks.objects.filter(user=self.request.user).select_related('category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -73,13 +75,18 @@ class BooksByCategory(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return ReadBooks.objects.filter(category__slug=self.kwargs['slug'], user=self.request.user)
+        return ReadBooks.objects.filter(category__slug=self.kwargs['slug'], user=self.request.user) \
+            .select_related('category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = Category.objects.get(slug=self.kwargs['slug'])
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
-        context['cnt'] = ReadBooks.objects.filter(category__slug=self.kwargs['slug'], user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
+        context['cnt'] = ReadBooks.objects.values('user').filter(category__slug=self.kwargs['slug'],
+                                                                 user=self.request.user).count()
         return context
 
 
@@ -90,7 +97,8 @@ class SingleBook(LoginRequiredMixin, DetailView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return ReadBooks.objects.filter(slug=self.kwargs['slug'], user=self.request.user)
+        return ReadBooks.objects.filter(slug=self.kwargs['slug'], user=self.request.user).select_related(
+            'category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,12 +114,16 @@ class BooksByAuthor(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return ReadBooks.objects.filter(author__slug=self.kwargs['slug'], user=self.request.user)
+        return ReadBooks.objects.filter(author__slug=self.kwargs['slug'], user=self.request.user).select_related(
+            'category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['name'] = Author.objects.get(slug=self.kwargs['slug'])
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         context['cnt'] = ReadBooks.objects.filter(author__slug=self.kwargs['slug'], user=self.request.user).count()
         return context
 
@@ -124,12 +136,15 @@ class FutureBooks(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return UnreadBooks.objects.filter(user=self.request.user)
+        return UnreadBooks.objects.filter(user=self.request.user).select_related('category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Книги на будущее'
-        context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -139,6 +154,7 @@ class AddReadBooks(LoginRequiredMixin, CreateView):
     login_url = '/login/'
 
     def form_valid(self, form):
+        messages.success(self.request, 'Книга успешно добавлена!')
         form.instance.user = self.request.user
         form.instance.slug = original_slug = slugify(form.instance.title)
         i = 1
@@ -151,7 +167,10 @@ class AddReadBooks(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление книги'
         context['form'].fields['author'].queryset = Author.objects.filter(user=self.request.user)
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -173,7 +192,10 @@ class AddAuthor(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление автора'
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -199,7 +221,10 @@ class AddUnreadBooks(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Добавление книги'
         context['form'].fields['author'].queryset = Author.objects.filter(user=self.request.user)
-        context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -237,13 +262,16 @@ class ListAuthors(LoginRequiredMixin, ListView):
     login_url = '/login/'
 
     def get_queryset(self):
-        return Author.objects.annotate(cnt_r=Count('readbooks')).annotate(cnt_unr=Count('unreadbooks')).\
+        return Author.objects.annotate(cnt_r=Count('readbooks')).annotate(cnt_unr=Count('unreadbooks')). \
             filter(cnt_r=0, cnt_unr=0, user=self.request.user).order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Список авторов'
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -267,14 +295,17 @@ class SearchReadbooks(ListView):
 
     def get_queryset(self):
         return ReadBooks.objects.filter(Q(title__icontains=self.request.GET.get('s')) |
-                                        Q(author__name__icontains=self.request.GET.get('s')), user=self.request.user)
+                                        Q(author__name__icontains=self.request.GET.get('s')), user=self.request.user) \
+            .select_related('category').select_related('author')
 
     def get_context_data(self, *, object_list=None, **kwargs):
-
         context = super().get_context_data(**kwargs)
         context['s'] = f"s={self.request.GET.get('s')}&"
         context['title'] = self.request.GET.get('s')
-        context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -285,13 +316,17 @@ class SearchUnreadbooks(ListView):
 
     def get_queryset(self):
         return UnreadBooks.objects.filter(Q(title__icontains=self.request.GET.get('s')) |
-                                          Q(author__name__icontains=self.request.GET.get('s')), user=self.request.user)
+                                          Q(author__name__icontains=self.request.GET.get('s')), user=self.request.user) \
+            .select_related('category').select_related('author')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['s'] = f"s={self.request.GET.get('s')}&"
         context['title'] = self.request.GET.get('s')
-        context['cnt_all'] = UnreadBooks.objects.filter(user=self.request.user).count()
+        context['cnt_all'] = cache.get('cnt_all')
+        if not context['cnt_all']:
+            context['cnt_all'] = ReadBooks.objects.filter(user=self.request.user).count()
+            cache.set('cnt_all', context['cnt_all'], 15)
         return context
 
 
@@ -305,7 +340,8 @@ class ReadBooksByYear(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         year = self.kwargs['year']
-        return ReadBooks.objects.filter(date_of_reading__year=year, user=self.request.user)
+        return ReadBooks.objects.filter(date_of_reading__year=year, user=self.request.user).select_related(
+            'category').select_related('author')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

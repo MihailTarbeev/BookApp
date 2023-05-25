@@ -10,7 +10,7 @@
 <div id="main">
 
     {% if books %}
-    <h1>Книги по Вашему запросу:</h1>
+    <h1>Книги по Вашему запросу <span style="text-transform: none">"{{ title }}"</span>:</h1>
     {% endif %}
     {% for book in books %}
     {% include 'inc/_post.html' %}
