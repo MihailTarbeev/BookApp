@@ -17,6 +17,11 @@
   <b>pip install -r requirements.txt</b></p>
 <p>You can run the server locally and execute the command in the terminal:<br>
   <b>python manage.py runserver</b></p>
-<p>After that you can  log in to the test profile with test books:<br>
+<p>After that you can log in to the test profile with test books:<br>
+  login: <b>Test_User</b><br>
+  password: <b>Test_password</b></p>
+<p>Also, I rented a domain and deployed the site here:<br>
+  Url: <b>www.ibookworm.ru</b><br>
+  You can log in to the test profile with test books:<br>
   login: <b>Test_User</b><br>
   password: <b>Test_password</b></p>
